@@ -30,6 +30,7 @@ combination with the sexp movement functions (=C-M-f= forward, =C-M-b=
 back, =C-M-u= up, =C-M-d= down)
 
 #+begin_src emacs-lisp
+(starter-kit-install-if-needed 'paredit)
 (require 'paredit)
 (defun turn-on-paredit ()
   (paredit-mode +1))
@@ -84,6 +85,8 @@ back, =C-M-u= up, =C-M-d= down)
    :END:
 
 #+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'clojure-mode)
+
   (require 'clojure-mode)
 
   (add-hook 'clojure-mode-hook 'run-starter-kit-coding-hook)

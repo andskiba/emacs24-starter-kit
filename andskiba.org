@@ -1,0 +1,239 @@
+* Load Starter Kit bundles
+#+begin_src emacs-lisp
+  (starter-kit-load "org")
+  (starter-kit-load "yasnippet")
+  (starter-kit-load "lisp")
+  (starter-kit-load "misc-recommended")
+#+end_src
+* General settings
+#+begin_src emacs-lisp
+  (scroll-bar-mode nil)
+  (setq-default tab-width 4)
+  (setq tab-width 4)
+  (setq require-final-newline 'ask)
+  (setq-default fill-column 78)
+  
+  (column-number-mode)
+#+end_src
+
+* Key bindings
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c s p") 'as/php-doc-search)
+(global-set-key (kbd "C-c s m") 'as/mysql-doc-search)
+(global-set-key (kbd "C-c s j") 'as/mdn-doc-search)
+(global-set-key (kbd "C-c s g") 'as/prelude-google)
+(global-set-key (kbd "C-c s d") 'as/merriam-webster-search)
+
+(global-set-key (kbd "C-c s f") 'flymake-mode)
+
+(global-set-key (kbd "C-c s c b") 'as/comment-box)
+(global-set-key (kbd "C-c s c f") 'as/function-comment)
+#+end_src
+* Aliases
+#+begin_src emacs-lisp
+(defalias 'qrr 'query-replace-regexp)
+#+end_src
+
+* Defuns
+** Insert my name and email
+#+begin_src emacs-lisp
+  (defun as/name ()
+    "Inert my name and email."
+    (interactive)
+    (insert "Andrzej Skiba <jedrek@metaelement.com>"))
+#+end_src
+** Code commenting utilities
+#+begin_src emacs-lisp
+  (defun as/comment-section ()
+    (interactive)
+    (flet ((insert-dashes (number)
+             (dotimes (i number)
+               (insert "-"))))
+      (save-excursion
+       (beginning-of-line)
+       (funcall indent-line-function)
+       (let* ((beg (current-column))
+              (end (progn (end-of-line) (current-column)))
+              (string-width (- end beg))
+              (dash-number (/ (- 80 beg string-width 6) 2)))
+         (beginning-of-line)
+         (funcall indent-line-function)
+         (insert "/*")
+         (insert-dashes dash-number)
+         (insert " ")
+         (end-of-line)
+         (insert " ")
+         (insert-dashes dash-number)
+         (when (oddp string-width) (insert "-"))
+         (insert "*/")))))
+  
+  (defun as/space-string (beginning end)
+    "Add a space after each character to make the string stand ont.
+  Useful for making sections of code stand out."
+    (interactive "r")
+    (save-excursion
+     (goto-char beginning)
+     (dotimes (i (- end beginning 1))
+       (forward-char)
+       (insert-char ?\  1))))
+  
+  (defun as/comment-box (beg end) 
+    "Do some fancy commenting"
+    (interactive "r")
+    (flet ((draw-line (&optional columns)
+             (let ((dashes ""))
+               (dotimes (i (- (if columns columns 80) 2))
+                 (setq dashes (concat dashes "-")))
+               (insert "//" dashes "\n"))))
+      (save-restriction
+       ;; comment the region with one line comments
+       (goto-char beg)
+       (beginning-of-line)
+       (while (< (point) end)
+              (insert "// ")
+              (forward-line)
+              (beginning-of-line))
+  
+       ;; draw bottom line
+       (end-of-line)
+       (draw-line)
+  
+       ;; draw top line
+       (goto-char beg)
+       (draw-line))))
+  
+  (defun as/function-comment ()
+    "Insert a box for a function comment."
+    (interactive)
+    (setq last-kbd-macro
+          [tab ?/ ?* ?* return tab ?* tab return ?* ?/ ?\C-p ? ])
+    (call-last-kbd-macro))
+#+end_src
+** Searching online documentations
+#+begin_src emacs-lisp
+  (defun as/prelude-google ()
+    "Googles a query or region if any."
+    (interactive)
+    (browse-url
+     (concat
+      "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+      (if mark-active
+          (buffer-substring (region-beginning) (region-end))
+          (read-string "Google: ")))))
+  
+  (defmacro def-as-doc-search (fn-name def-prompt prompt url)
+    `(defun ,fn-name (str)
+      (interactive
+       (let ((str (thing-at-point 'symbol))
+             (enable-recursive-minibuffers t))
+         (list (read-from-minibuffer
+                (if str
+                    (format ,def-prompt str) ,prompt)
+                str))))
+      (browse-url (format ,url str))))
+  
+  (def-as-doc-search as/php-doc-search
+    "PHP docs search (default %s): "
+    "PHP docs search: "
+    "http://www.php.net/manual-lookup.php?pattern=%s&lang=en&scope=quickref")
+  
+  (def-as-doc-search as/mysql-doc-search
+    "MySQL docs search (default %s): "
+    "MySQL docs search: "
+    "http://search.oracle.com/search/search?q=%s&group=MySQL")
+  
+  (def-as-doc-search as/mdn-doc-search
+    "MDN search (default %s): "
+    "MDN search: "
+    "https://developer.mozilla.org/en-US/search?q=%s")
+  
+  (def-as-doc-search as/merriam-webster-search
+    "M-W dictionary (default %s): "
+    "M-W dictionary: "
+    "http://www.merriam-webster.com/dictionary/%s")
+#+end_src
+** Themes
+I like to switch between my favorite themes easily. 
+#+begin_src emacs-lisp
+  (defvar *as/themes* [tango-2
+                       deeper-blue
+                       whiteboard
+                       adwaita
+                       (tsdh-dark .
+                        (lambda ()
+                          (set-face-attribute 'mode-line nil
+                                              :font "DejaVu Sans Mono-14"
+                                              :box nil)
+                          (set-face-attribute 'minibuffer-prompt nil
+                                              :box nil)))
+                       tsdh-light])
+  (defvar *as/current-theme* 0)
+  
+  (defun as/load-current-theme ()
+    "Load the current theme from the list of my favorite themes."
+    (let ((theme (elt *as/themes* *as/current-theme*)))
+      (load-theme (if (listp theme) (car theme) theme))
+      (enable-theme (if (listp theme) (car theme) theme))
+      (if (listp theme)
+          (funcall (cdr theme)))))
+  
+  (defun as/unload-current-theme ()
+    (disable-theme (elt *as/themes* *as/current-theme*)))
+  
+  (defun as/next-theme ()
+    "Load next theme in the *as/themes* list. Allows for easy
+  switching between favourite themes without the need to remember
+  names."
+    (interactive)
+    (let ((next (mod (1+ *as/current-theme*) (length *as/themes*))))
+      (as/unload-current-theme)
+      (setq *as/current-theme* next)
+      (as/load-current-theme)))
+  
+  ;; Add theme directories to custom-theme-load-path
+  (let* ((theme-dir (concat starter-kit-dir "themes/"))
+         (solarized-dir (concat theme-dir "emacs-color-theme-solarized/")))
+    (add-to-list 'custom-theme-load-path theme-dir)
+  
+    ;; special case for solarized theme
+    (add-to-list 'load-path solarized-dir)
+    (add-to-list 'custom-theme-load-path solarized-dir))
+  
+  (global-set-key (kbd "C-c t") 'as/next-theme)
+  
+  (as/load-current-theme)
+#+end_src
+
+** Other
+#+begin_src emacs-lisp
+  (defun as/image-size ()
+    (interactive)
+    (let ((dim (image-size (create-image (first (dired-get-marked-files))) t)))
+      (message "Width: %d, Height: %d" (car dim) (cdr dim))))
+#+end_src
+* Package configurations
+** IDO
+#+begin_src emacs-lisp
+  (add-hook 'ido-setup-hook 'ido-my-keys)
+  
+  (defun ido-my-keys ()
+    "Add my keybindings for ido."
+    (define-key ido-completion-map "\C-n" 'ido-next-match)
+    (define-key ido-completion-map "\C-p" 'ido-prev-match))
+#+end_src
+** YASnippet
+YAS is already loaded through the Starter Kit bundle so here I only
+add dropdown support and my own snippets directory.
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'dropdown-list)
+  (require 'dropdown-list) ; required for dropdown-prompt to work
+  (setq yas/prompt-functions '(yas/dropdown-prompt
+                               yas/completing-prompt
+                               yas/ido-prompt
+                               yas/no-prompt))
+  (push "~/.emacs.d/snippets" yas-snippet-dirs)
+#+end_src
+* Fonts
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil :font "Consolas-11")
+#+end_src
