@@ -12,7 +12,7 @@
   (setq tab-width 4)
   (setq require-final-newline 'ask)
   (setq-default fill-column 78)
-  
+
   (column-number-mode)
 #+end_src
 
@@ -35,6 +35,25 @@
 #+end_src
 
 * Defuns
+** Adding ELPA packages to load-path if necessary
+#+begin_src emacs-lisp
+  (defun add-package-to-load-path (&rest packages)
+    "Add a path of a package from ELPA to the load-path.
+
+  Takes any number of packages as arguments.
+
+  Some packages don't have autoloading setup or cannot be required
+  for some reason so I explicitly add their directories to the
+  load-path and require them."
+    (mapc (lambda (package)
+            (let ((p (if (symbolp package) (symbol-name package) package)))
+              (add-to-list
+               'load-path
+               (first (file-expand-wildcards
+                       (concat starter-kit-dir "elpa/" p "-*"))))))
+          packages))
+#+end_src
+
 ** Insert my name and email
 #+begin_src emacs-lisp
   (defun as/name ()
@@ -66,7 +85,7 @@
          (insert-dashes dash-number)
          (when (oddp string-width) (insert "-"))
          (insert "*/")))))
-  
+
   (defun as/space-string (beginning end)
     "Add a space after each character to make the string stand ont.
   Useful for making sections of code stand out."
@@ -76,8 +95,8 @@
      (dotimes (i (- end beginning 1))
        (forward-char)
        (insert-char ?\  1))))
-  
-  (defun as/comment-box (beg end) 
+
+  (defun as/comment-box (beg end)
     "Do some fancy commenting"
     (interactive "r")
     (flet ((draw-line (&optional columns)
@@ -93,15 +112,15 @@
               (insert "// ")
               (forward-line)
               (beginning-of-line))
-  
+
        ;; draw bottom line
        (end-of-line)
        (draw-line)
-  
+
        ;; draw top line
        (goto-char beg)
        (draw-line))))
-  
+
   (defun as/function-comment ()
     "Insert a box for a function comment."
     (interactive)
@@ -120,7 +139,7 @@
       (if mark-active
           (buffer-substring (region-beginning) (region-end))
           (read-string "Google: ")))))
-  
+
   (defmacro def-as-doc-search (fn-name def-prompt prompt url)
     `(defun ,fn-name (str)
       (interactive
@@ -131,29 +150,29 @@
                     (format ,def-prompt str) ,prompt)
                 str))))
       (browse-url (format ,url str))))
-  
+
   (def-as-doc-search as/php-doc-search
     "PHP docs search (default %s): "
     "PHP docs search: "
     "http://www.php.net/manual-lookup.php?pattern=%s&lang=en&scope=quickref")
-  
+
   (def-as-doc-search as/mysql-doc-search
     "MySQL docs search (default %s): "
     "MySQL docs search: "
     "http://search.oracle.com/search/search?q=%s&group=MySQL")
-  
+
   (def-as-doc-search as/mdn-doc-search
     "MDN search (default %s): "
     "MDN search: "
     "https://developer.mozilla.org/en-US/search?q=%s")
-  
+
   (def-as-doc-search as/merriam-webster-search
     "M-W dictionary (default %s): "
     "M-W dictionary: "
     "http://www.merriam-webster.com/dictionary/%s")
 #+end_src
 ** Themes
-I like to switch between my favorite themes easily. 
+I like to switch between my favorite themes easily.
 #+begin_src emacs-lisp
   (defvar *as/theme-packages* '(tango-2-theme
                                 zenburn-theme
@@ -215,10 +234,10 @@ I like to switch between my favorite themes easily.
                                 zen-and-art-theme
                                 zenburn-theme
                                 tango-2-theme))
-  
+
   (dolist (theme *as/theme-packages*)
     (starter-kit-install-if-needed theme))
-  
+
   (defvar *as/themes* [tango-2
                        deeper-blue
                        whiteboard
@@ -232,7 +251,7 @@ I like to switch between my favorite themes easily.
                                               :box nil)))
                        tsdh-light])
   (defvar *as/current-theme* 0)
-  
+
   (defun as/load-current-theme ()
     "Load the current theme from the list of my favorite themes."
     (let ((theme (elt *as/themes* *as/current-theme*)))
@@ -240,10 +259,10 @@ I like to switch between my favorite themes easily.
       (enable-theme (if (listp theme) (car theme) theme))
       (if (listp theme)
           (funcall (cdr theme)))))
-  
+
   (defun as/unload-current-theme ()
     (disable-theme (elt *as/themes* *as/current-theme*)))
-  
+
   (defun as/next-theme ()
     "Load next theme in the *as/themes* list. Allows for easy
   switching between favourite themes without the need to remember
@@ -253,18 +272,18 @@ I like to switch between my favorite themes easily.
       (as/unload-current-theme)
       (setq *as/current-theme* next)
       (as/load-current-theme)))
-  
+
   ;; Add theme directories to custom-theme-load-path
   (let* ((theme-dir (concat starter-kit-dir "themes/"))
          (solarized-dir (concat theme-dir "emacs-color-theme-solarized/")))
     (add-to-list 'custom-theme-load-path theme-dir)
-  
+
     ;; special case for solarized theme
     (add-to-list 'load-path solarized-dir)
     (add-to-list 'custom-theme-load-path solarized-dir))
-  
+
   (global-set-key (kbd "C-c t") 'as/next-theme)
-  
+
   (as/load-current-theme)
 #+end_src
 
@@ -276,10 +295,31 @@ I like to switch between my favorite themes easily.
       (message "Width: %d, Height: %d" (car dim) (cdr dim))))
 #+end_src
 * Package configurations
+** aHg
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'ahg)
+  (add-package-to-load-path 'ahg)
+  (require 'ahg)
+  (global-set-key (kbd "C-c h g s") 'ahg-status)
+#+end_src
+** PHP
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'php-mode)
+#+end_src
+** JavaScript
+#+begin_src emacs-lisp
+  (setq js-indent-level 2)
+#+end_src
+** Yaml
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'yaml-mode)
+  (setq yaml-indent-offset 2)
+#+end_src
+
 ** IDO
 #+begin_src emacs-lisp
   (add-hook 'ido-setup-hook 'ido-my-keys)
-  
+
   (defun ido-my-keys ()
     "Add my keybindings for ido."
     (define-key ido-completion-map "\C-n" 'ido-next-match)
@@ -303,6 +343,6 @@ add dropdown support and my own snippets directory.
     (cond
      ((eq system-type 'gnu/linux) "DejaVu Sans Mono-11")
      ((eq system-type 'windows)   "Consolas-11")))
-  
+
   (set-face-attribute 'default nil :font *as/font-string*)
 #+end_src
