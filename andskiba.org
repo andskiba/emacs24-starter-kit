@@ -155,6 +155,70 @@
 ** Themes
 I like to switch between my favorite themes easily. 
 #+begin_src emacs-lisp
+  (defvar *as/theme-packages* '(tango-2-theme
+                                zenburn-theme
+                                ample-zen-theme
+                                anti-zenburn-theme
+                                assemblage-theme
+                                birds-of-paradise-plus-theme
+                                bubbleberry-theme
+                                busybee-theme
+                                calmer-forest-theme
+                                cherry-blossom-theme
+                                clues-theme
+                                cyberpunk-theme
+                                dakrone-theme
+                                darkburn-theme
+                                deep-thought-theme
+                                django-theme
+                                espresso-theme
+                                flatland-theme
+                                gandalf-theme
+                                github-theme
+                                grandshell-theme
+                                gruvbox-theme
+                                hemisu-theme
+                                heroku-theme
+                                inkpot-theme
+                                ir-black-theme
+                                jujube-theme
+                                late-night-theme
+                                leuven-theme
+                                moe-theme
+                                molokai-theme
+                                monokai-theme
+                                mustang-theme
+                                naquadah-theme
+                                noctilux-theme
+                                nzenburn-theme
+                                obsidian-theme
+                                purple-haze-theme
+                                qsimpleq-theme
+                                remember-theme
+                                reverse-theme
+                                soft-morning-theme
+                                solarized-theme
+                                soothe-theme
+                                spacegray-theme
+                                steady-theme
+                                subatomic-theme
+                                sunny-day-theme
+                                tango-plus-theme
+                                tommyh-theme
+                                toxi-theme
+                                tron-theme
+                                tronesque-theme
+                                twilight-theme
+                                ujelly-theme
+                                underwater-theme
+                                waher-theme
+                                zen-and-art-theme
+                                zenburn-theme
+                                tango-2-theme))
+  
+  (dolist (theme *as/theme-packages*)
+    (starter-kit-install-if-needed theme))
+  
   (defvar *as/themes* [tango-2
                        deeper-blue
                        whiteboard
@@ -235,5 +299,10 @@ add dropdown support and my own snippets directory.
 #+end_src
 * Fonts
 #+begin_src emacs-lisp
-(set-face-attribute 'default nil :font "Consolas-11")
+  (defvar *as/font-string*
+    (cond
+     ((eq system-type 'gnu/linux) "DejaVu Sans Mono-11")
+     ((eq system-type 'windows)   "Consolas-11")))
+  
+  (set-face-attribute 'default nil :font *as/font-string*)
 #+end_src
