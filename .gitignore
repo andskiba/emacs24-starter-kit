@@ -11,6 +11,7 @@ places
 tramp
 ido.last
 %backup%~
+projectile-bookmarks.eld
 
 ## directories
 backups/*

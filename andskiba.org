@@ -323,6 +323,16 @@ I like to switch between my favorite themes easily.
      (sql . nil)
      (sqlite . nil)))
 #+end_src
+** ack!
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'ack-and-a-half)
+#+end_src
+
+** Projectile
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'projectile)
+  (projectile-global-mode)
+#+end_src
 
 ** aHg
 #+begin_src emacs-lisp

@@ -1,0 +1,32 @@
+* Introduction
+This file contains configuration specific to my work as Misys. Specifically
+things that are related to Java development, that I don't do elsewhere.
+
+* Configuration
+** Java
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'emacs-eclim)
+  (starter-kit-install-if-needed 'company)
+  (starter-kit-install-if-needed 'auto-complete)
+
+  ;; emacs-eclim
+  (require 'eclim)
+  (global-eclim-mode)
+
+  (custom-set-variables
+   '(eclim-eclipse-dirs '("~/software/sts-3.4.0/sts-3.4.0.RELEASE")))
+
+  ;; regular auto-complete initialization
+  (require 'auto-complete-config)
+  (ac-config-default)
+
+  ;; add the emacs-eclim source
+  (require 'ac-emacs-eclim-source)
+  (ac-emacs-eclim-config)
+
+  (require 'company)
+  (require 'company-emacs-eclim)
+  (company-emacs-eclim-setup)
+  (global-company-mode t)
+
+#+end_src
