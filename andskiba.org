@@ -295,6 +295,17 @@ I like to switch between my favorite themes easily.
       (message "Width: %d, Height: %d" (car dim) (cdr dim))))
 #+end_src
 * Package configurations
+** ack!
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'ack-and-a-half)
+#+end_src
+
+** Projectile
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'projectile)
+  (projectile-global-mode)
+#+end_src
+
 ** aHg
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'ahg)
