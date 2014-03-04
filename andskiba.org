@@ -15,20 +15,6 @@
 
   (column-number-mode)
 #+end_src
-
-* Key bindings
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-c s p") 'as/php-doc-search)
-(global-set-key (kbd "C-c s m") 'as/mysql-doc-search)
-(global-set-key (kbd "C-c s j") 'as/mdn-doc-search)
-(global-set-key (kbd "C-c s g") 'as/prelude-google)
-(global-set-key (kbd "C-c s d") 'as/merriam-webster-search)
-
-(global-set-key (kbd "C-c s f") 'flymake-mode)
-
-(global-set-key (kbd "C-c s c b") 'as/comment-box)
-(global-set-key (kbd "C-c s c f") 'as/function-comment)
-#+end_src
 * Aliases
 #+begin_src emacs-lisp
 (defalias 'qrr 'query-replace-regexp)
@@ -295,6 +281,49 @@ I like to switch between my favorite themes easily.
       (message "Width: %d, Height: %d" (car dim) (cdr dim))))
 #+end_src
 * Package configurations
+** Org
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c b") 'org-iswitchb)
+
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)"  "|"
+                    "DONE(d)" "CANCELLED(c)" "DEFERRED(f)")))
+  (setq org-tag-alist
+        '(("Work" . ?w) ("project" . ?p) ("programming" . ?g)
+          ("reading" . ?r) ("school" . ?s)))
+  (setq org-log-done 'time)
+  (setq org-hide-leading-stars t)
+  (setq org-startup-folded t)
+
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)    ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+  ;; org-babel
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((R . t)
+     (ditaa . t)
+     (dot . t)
+     (emacs-lisp . t)
+     (gnuplot . nil)
+     (haskell . nil)
+     (latex . t)
+     (ocaml . nil)
+     (perl . t)
+     (python . t)
+     (ruby . t)
+     (screen . nil)
+     (sh . t)
+     (sql . nil)
+     (sqlite . nil)))
+#+end_src
+
 ** aHg
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'ahg)
@@ -345,4 +374,21 @@ add dropdown support and my own snippets directory.
      ((eq system-type 'windows)   "Consolas-11")))
 
   (set-face-attribute 'default nil :font *as/font-string*)
+#+end_src
+
+* Key bindings
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c s p") 'as/php-doc-search)
+  (global-set-key (kbd "C-c s m") 'as/mysql-doc-search)
+  (global-set-key (kbd "C-c s j") 'as/mdn-doc-search)
+  (global-set-key (kbd "C-c s g") 'as/prelude-google)
+  (global-set-key (kbd "C-c s d") 'as/merriam-webster-search)
+
+  (global-set-key (kbd "C-c s f") 'flymake-mode)
+
+  (global-set-key (kbd "C-c s c b") 'as/comment-box)
+  (global-set-key (kbd "C-c s c f") 'as/function-comment)
+
+  (global-set-key (kbd "<f11>") 'magit-status)
+  (global-set-key (kbd "<f10>") 'menu-bar-mode)
 #+end_src
