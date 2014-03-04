@@ -281,6 +281,24 @@ I like to switch between my favorite themes easily.
       (message "Width: %d, Height: %d" (car dim) (cdr dim))))
 #+end_src
 * Package configurations
+** Semantic
+#+begin_src emacs-lisp
+  (setq semantic-default-submodes
+        '(global-semanticdb-minor-mode
+
+          global-semantic-idle-scheduler-mode
+          global-semantic-idle-summary-mode
+
+          global-semantic-highlight-func-mode
+          global-semantic-stickyfunc-mode
+          global-semantic-decoration-mode
+
+          global-semantic-mru-bookmark-mode))
+  (semantic-mode 1)
+
+  (add-to-list 'load-path (concat starter-kit-dir "grammars/"))
+
+#+end_src
 ** Org
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)
@@ -334,6 +352,20 @@ I like to switch between my favorite themes easily.
   (projectile-global-mode)
 #+end_src
 
+** Autocomplete
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'auto-complete)
+  (require 'auto-complete-config)
+  (ac-config-default)
+#+end_src
+
+** Company
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'company)
+  (require 'company)
+  (global-company-mode t)
+#+end_src
+
 ** aHg
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'ahg)
@@ -344,6 +376,8 @@ I like to switch between my favorite themes easily.
 ** PHP
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'php-mode)
+
+  (require 'wisent-php)
 #+end_src
 ** JavaScript
 #+begin_src emacs-lisp
@@ -357,6 +391,9 @@ I like to switch between my favorite themes easily.
 
 ** IDO
 #+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'ido-ubiquitous)
+  (starter-kit-install-if-needed 'idomenu)
+
   (add-hook 'ido-setup-hook 'ido-my-keys)
 
   (defun ido-my-keys ()
@@ -376,6 +413,7 @@ add dropdown support and my own snippets directory.
                                yas/no-prompt))
   (push "~/.emacs.d/snippets" yas-snippet-dirs)
 #+end_src
+
 * Fonts
 #+begin_src emacs-lisp
   (defvar *as/font-string*

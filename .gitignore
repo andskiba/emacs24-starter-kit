@@ -12,6 +12,8 @@ tramp
 ido.last
 %backup%~
 projectile-bookmarks.eld
+ac-comphist.dat
+semanticdb/*
 
 ## directories
 backups/*
@@ -54,3 +56,6 @@ secret.org
 .emacs.desktop*
 .*~
 agent/*
+
+# overwrite ignores
+!grammars/*.el
