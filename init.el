@@ -5,7 +5,7 @@
 ;; This is the first thing to get loaded.
 ;;
 
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; load Org-mode from source when the ORG_HOME environment variable is set
 (when (getenv "ORG_HOME")

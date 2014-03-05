@@ -414,14 +414,22 @@ add dropdown support and my own snippets directory.
   (push "~/.emacs.d/snippets" yas-snippet-dirs)
 #+end_src
 
-* Fonts
+* Frame and fonts
 #+begin_src emacs-lisp
   (defvar *as/font-string*
     (cond
      ((eq system-type 'gnu/linux) "DejaVu Sans Mono-11")
      ((eq system-type 'windows)   "Consolas-11")))
 
-  (set-face-attribute 'default nil :font *as/font-string*)
+  (setq initial-frame-alist
+        `((vertical-scroll-bars . nil)))
+  (setq default-frame-alist
+        `((font . ,*as/font-string*)
+          (vertical-scroll-bars . nil)))
+
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
 #+end_src
 
 * Key bindings
@@ -440,3 +448,9 @@ add dropdown support and my own snippets directory.
   (global-set-key (kbd "<f11>") 'magit-status)
   (global-set-key (kbd "<f10>") 'menu-bar-mode)
 #+end_src
+
+* Server
+#+begin_src emacs-lisp
+  (server-start)
+#+end_src
+
