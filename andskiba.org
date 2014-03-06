@@ -465,7 +465,10 @@ add dropdown support and my own snippets directory.
   (add-hook 'css-mode-hook 'turn-on-rainbow)
   (add-hook 'less-css-mode-hook 'turn-on-rainbow)
 #+end_src
-
+** SVN
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'psvn)
+#+end_src
 
 * Frame and fonts
 #+begin_src emacs-lisp
