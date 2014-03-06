@@ -72,6 +72,44 @@
          (when (oddp string-width) (insert "-"))
          (insert "*/")))))
 
+  (defun as/configurable-comment-section (leading-str fill-char)
+    "Turns the current line into a comment section."
+    (interactive "sLeading string: \ncFill character: ")
+    (flet ((insert-times (char number)
+                         (dotimes (i number)
+                           (insert char)))
+           (string-reverse (str)
+                           "Reverse the str where str is a string"
+                           (apply #'string
+                                  (reverse
+                                   (string-to-list str)))))
+      (save-excursion
+        (beginning-of-line)
+        (let* ((beg (current-column))
+               (end (progn (end-of-line) (current-column)))
+               (string-width (- end beg))
+
+               (lead-end (y-or-n-p "End with lead?"))
+               (lead-length (length leading-str))
+               (fill-number (/ (- 80
+                                  string-width
+                                  (* lead-length (if lead-end 2 1))
+                                  2) ; spaces
+                               2))
+               (total-odd (oddp (+ (* (if lead-end 2 1) lead-length)
+                                   (* 2 fill-number)
+                                   2))))
+          (beginning-of-line)
+          (insert leading-str)
+          (insert-times fill-char fill-number)
+          (insert " ")
+          (end-of-line)
+          (insert " ")
+          (insert-times fill-char fill-number)
+          (when total-odd (insert fill-char))
+          (when lead-end (insert (string-reverse leading-str)))))))
+
+
   (defun as/space-string (beginning end)
     "Add a space after each character to make the string stand ont.
   Useful for making sections of code stand out."
@@ -228,23 +266,19 @@ I like to switch between my favorite themes easily.
                        deeper-blue
                        whiteboard
                        adwaita
-                       (tsdh-dark .
-                        (lambda ()
-                          (set-face-attribute 'mode-line nil
-                                              :font "DejaVu Sans Mono-14"
-                                              :box nil)
-                          (set-face-attribute 'minibuffer-prompt nil
-                                              :box nil)))
+                       tsdh-dark
                        tsdh-light])
   (defvar *as/current-theme* 0)
 
   (defun as/load-current-theme ()
     "Load the current theme from the list of my favorite themes."
-    (let ((theme (elt *as/themes* *as/current-theme*)))
-      (load-theme (if (listp theme) (car theme) theme))
-      (enable-theme (if (listp theme) (car theme) theme))
-      (if (listp theme)
-          (funcall (cdr theme)))))
+    (let* ((theme-def (elt *as/themes* *as/current-theme*))
+           (theme-name (if (listp theme-def) (car theme-def) theme-def))
+           (theme-func (if (listp theme-def) (cdr theme-def) (lambda () nil))))
+      (if (member theme-name custom-known-themes)
+          (enable-theme theme-name)
+          (load-theme theme-name))
+      (funcall theme-func)))
 
   (defun as/unload-current-theme ()
     (disable-theme (elt *as/themes* *as/current-theme*)))
@@ -413,6 +447,25 @@ add dropdown support and my own snippets directory.
                                yas/no-prompt))
   (push "~/.emacs.d/snippets" yas-snippet-dirs)
 #+end_src
+** Markdown
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'markdown-mode)
+  (starter-kit-install-if-needed 'markdown-mode+)
+#+end_src
+** Htmlize
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'htmlize)
+#+end_src
+** CSS
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'less-css-mode)
+  (starter-kit-install-if-needed 'rainbow-mode)
+
+  (defun turn-on-rainbow () (rainbow-mode t))
+  (add-hook 'css-mode-hook 'turn-on-rainbow)
+  (add-hook 'less-css-mode-hook 'turn-on-rainbow)
+#+end_src
+
 
 * Frame and fonts
 #+begin_src emacs-lisp
