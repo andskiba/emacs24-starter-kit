@@ -14,6 +14,8 @@
   (setq-default fill-column 78)
 
   (column-number-mode)
+
+  (prefer-coding-system 'utf-8-unix)
 #+end_src
 * Aliases
 #+begin_src emacs-lisp
@@ -21,6 +23,16 @@
 #+end_src
 
 * Defuns
+** General
+In this section there are generally useful function definiations.
+
+#+begin_src emacs-lisp
+  (defun is-windows ()
+    "Returns T if we are on a Windows system or NIL otherwise."
+    (or (eq system-type 'windows)
+        (eq system-type 'windows-nt)))
+#+end_src
+
 ** Adding ELPA packages to load-path if necessary
 #+begin_src emacs-lisp
   (defun add-package-to-load-path (&rest packages)
@@ -470,12 +482,21 @@ add dropdown support and my own snippets directory.
   (starter-kit-install-if-needed 'psvn)
 #+end_src
 
+** Aspell
+We should use Aspell but only on windows.
+
+#+begin_src emacs-lisp
+  (when (is-windows)
+    (add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/")
+    (setq ispell-program-name "aspell"))
+#+end_src
+
 * Frame and fonts
 #+begin_src emacs-lisp
   (defvar *as/font-string*
     (cond
      ((eq system-type 'gnu/linux) "DejaVu Sans Mono-11")
-     ((eq system-type 'windows)   "Consolas-11")))
+     ((is-windows) "Consolas-11")))
 
   (setq initial-frame-alist
         `((vertical-scroll-bars . nil)))
