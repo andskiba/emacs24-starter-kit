@@ -391,11 +391,23 @@ block
         '(("ic"
            "Misys current TODOs"
            tags-todo
-           "CATEGORY=\"current\"")
+           "CATEGORY=\"current\""
+           ((org-agenda-files '("~/org/misys/tasks.org"))))
           ("if"
            "Misys future TODOs"
            tags-todo
-           "CATEGORY=\"future\"")))
+           "CATEGORY=\"future\""
+           ((org-agenda-files '("~/org/misys/tasks.org"))))
+          ("iC"
+           "Life current TODOs"
+           tags-todo
+           "CATEGORY=\"current\""
+           ((org-agenda-files '("~/org/work.org"))))
+          ("iF"
+           "Life current TODOs"
+           tags-todo
+           "CATEGORY=\"future\""
+           ((org-agenda-files '("~/org/work.org"))))))
 
   ;; org-babel
   (org-babel-do-load-languages
