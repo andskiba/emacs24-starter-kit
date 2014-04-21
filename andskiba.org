@@ -429,6 +429,11 @@ I like to switch between my favorite themes easily.
 #+begin_src emacs-lisp
   (setq js-indent-level 2)
 #+end_src
+** CoffeeScript
+#+BEGIN_SRC emacs-lisp
+  (starter-kit-install-if-needed 'coffee-mode)
+#+END_SRC
+
 ** Yaml
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'yaml-mode)
