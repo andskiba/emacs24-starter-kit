@@ -16,6 +16,7 @@ ac-comphist.dat
 semanticdb/*
 projectile.cache
 server/server
+session.*
 
 ## directories
 backups/*

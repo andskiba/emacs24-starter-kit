@@ -318,7 +318,24 @@ I like to switch between my favorite themes easily.
 
   (as/load-current-theme)
 #+end_src
-
+** COMMENT Pretty-print XML
+#+begin_src emacs-lisp
+  (defun as/pretty-print-xml-region (begin end)
+    "Pretty format XML markup in region. You need to have nxml-mode
+  http://www.emacswiki.org/cgi-bin/wiki/NxmlMode installed to do
+  this.  The function inserts linebreaks to separate tags that have
+  nothing but whitespace between them.  It then indents the markup
+  by using nxml's indentation rules."
+    (interactive "r")
+    (save-excursion
+        (nxml-mode)
+        (goto-char begin)
+        (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+          (backward-char) (insert "\n"))
+        (indent-region begin end))
+      (message "Ah, much better!"))
+#+end_src
+block
 ** Other
 #+begin_src emacs-lisp
   (defun as/image-size ()
@@ -367,6 +384,30 @@ I like to switch between my favorite themes easily.
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+  ;; custom agenda commands
+
+  (setq org-agenda-custom-commands
+        '(("ic"
+           "Misys current TODOs"
+           tags-todo
+           "CATEGORY=\"current\""
+           ((org-agenda-files '("~/org/misys/tasks.org"))))
+          ("if"
+           "Misys future TODOs"
+           tags-todo
+           "CATEGORY=\"future\""
+           ((org-agenda-files '("~/org/misys/tasks.org"))))
+          ("iC"
+           "Life current TODOs"
+           tags-todo
+           "CATEGORY=\"current\""
+           ((org-agenda-files '("~/org/work.org"))))
+          ("iF"
+           "Life current TODOs"
+           tags-todo
+           "CATEGORY=\"future\""
+           ((org-agenda-files '("~/org/work.org"))))))
 
   ;; org-babel
   (org-babel-do-load-languages
@@ -444,6 +485,8 @@ I like to switch between my favorite themes easily.
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'ido-ubiquitous)
   (starter-kit-install-if-needed 'idomenu)
+  (starter-kit-install-if-needed 'smex)
+  (starter-kit-install-if-needed 'ido-vertical-mode)
 
   (add-hook 'ido-setup-hook 'ido-my-keys)
 
@@ -451,6 +494,13 @@ I like to switch between my favorite themes easily.
     "Add my keybindings for ido."
     (define-key ido-completion-map "\C-n" 'ido-next-match)
     (define-key ido-completion-map "\C-p" 'ido-prev-match))
+
+  (require 'smex)
+  (require 'ido-vertical-mode)
+
+  (ido-mode 1)
+  (ido-vertical-mode 1)
+  (ido-ubiquitous-mode 1)
 #+end_src
 ** YASnippet
 YAS is already loaded through the Starter Kit bundle so here I only
@@ -529,6 +579,10 @@ We should use Aspell but only on windows.
 
   (global-set-key (kbd "<f11>") 'magit-status)
   (global-set-key (kbd "<f10>") 'menu-bar-mode)
+
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (global-set-key (kbd "C-c s M-x") 'execute-extended-command)
 #+end_src
 
 * Server
