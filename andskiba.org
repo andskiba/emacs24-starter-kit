@@ -3,6 +3,7 @@
   (starter-kit-load "org")
   (starter-kit-load "yasnippet")
   (starter-kit-load "lisp")
+  (starter-kit-load "ruby")
   (starter-kit-load "misc-recommended")
 #+end_src
 * General settings
