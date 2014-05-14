@@ -523,10 +523,15 @@ add dropdown support and my own snippets directory.
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'less-css-mode)
   (starter-kit-install-if-needed 'rainbow-mode)
+  (starter-kit-install-if-needed 'scss-mode)
+
+  (setq css-indent-offset 2)
+  (setq scss-compile-at-save nil)
 
   (defun turn-on-rainbow () (rainbow-mode t))
   (add-hook 'css-mode-hook 'turn-on-rainbow)
   (add-hook 'less-css-mode-hook 'turn-on-rainbow)
+  (add-hook 'scss-mode-hook 'turn-on-rainbow)
 #+end_src
 ** SVN
 #+begin_src emacs-lisp
@@ -542,6 +547,16 @@ We should use Aspell but only on windows.
     (setq ispell-program-name "aspell"))
 #+end_src
 
+** Ruby
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'rinari)
+#+end_src
+
+** Scheme and Racket
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'geiser)
+  (starter-kit-install-if-needed 'quack)
+#+end_src
 * Frame and fonts
 #+begin_src emacs-lisp
   (defvar *as/font-string*
