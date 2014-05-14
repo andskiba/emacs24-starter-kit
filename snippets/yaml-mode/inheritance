@@ -1,0 +1,5 @@
+inheritance: 
+  extends: ${1:Model}
+  type: ${2:column_aggregation}
+  keyField: ${3:type}
+  keyValue: '$0'

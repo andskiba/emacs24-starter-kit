@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: relation.one-to-many
+# key: relation
+# --
+${1:name}: 
+  onDelete: ${2:CASCADE}
+  local: ${3:parent_id}
+  foreign: ${4:id}
+  foreignAlias: $0

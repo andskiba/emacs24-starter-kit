@@ -1,0 +1,8 @@
+# contributor: Andrzej Skiba <jedrek@metaelement.com>
+# key: class
+# name: class ... { ... }
+# --
+class ${1:Foo}
+{
+	$0
+}
