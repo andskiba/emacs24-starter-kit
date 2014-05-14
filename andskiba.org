@@ -547,6 +547,11 @@ We should use Aspell but only on windows.
     (setq ispell-program-name "aspell"))
 #+end_src
 
+** Web-mode
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'web-mode)
+#+end_src
+
 * Frame and fonts
 #+begin_src emacs-lisp
   (defvar *as/font-string*
