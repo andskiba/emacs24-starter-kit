@@ -1,0 +1,8 @@
+#contributor : Andrzej Skiba <jedrek@metaelement.com>
+#key : class
+#name : class ... extends ... { ... }
+# --
+class ${1:Foo} extends ${2:Bar}
+{
+	$0
+}

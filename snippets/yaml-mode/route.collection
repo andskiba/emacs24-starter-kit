@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: route.collection
+# key: route
+# --
+${1:name}:
+  class: sfDoctrineRouteCollection
+  options: 
+    model:                ${2:Model}
+    module:               $1
+    prefix_path:          /$1
+    column:               id
+    with_wildcard_routes: true
+$0

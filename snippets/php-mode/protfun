@@ -1,0 +1,7 @@
+#contributor : Andrzej Skiba <jedrek@metaelement.com>
+#name : protfun
+# --
+protected function ${1:__construct}($2)
+{
+	$0
+}

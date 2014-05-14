@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: route.doctrine
+# key: route
+# --
+${1:name}:
+  class: sfDoctrineRoute        
+  url:   ${2:/}
+  options: { model: ${3:Model}, type: ${4:object} }
+  param: { module: ${5:default}, action: ${6:index} }
+$0

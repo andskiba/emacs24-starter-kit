@@ -471,6 +471,11 @@ block
 #+begin_src emacs-lisp
   (setq js-indent-level 2)
 #+end_src
+** CoffeeScript
+#+BEGIN_SRC emacs-lisp
+  (starter-kit-install-if-needed 'coffee-mode)
+#+END_SRC
+
 ** Yaml
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'yaml-mode)
@@ -546,16 +551,18 @@ We should use Aspell but only on windows.
     (add-to-list 'exec-path "C:/Program Files (x86)/Aspell/bin/")
     (setq ispell-program-name "aspell"))
 #+end_src
-
 ** Ruby
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'rinari)
 #+end_src
-
 ** Scheme and Racket
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'geiser)
   (starter-kit-install-if-needed 'quack)
+#+end_src
+** Web-mode
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'web-mode)
 #+end_src
 * Frame and fonts
 #+begin_src emacs-lisp

@@ -1,0 +1,4 @@
+<trans-unit id="$1">
+  <source>$2</source>
+  <target>$3</target>           
+</trans-unit>$0

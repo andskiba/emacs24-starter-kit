@@ -1,0 +1,11 @@
+#contributor : Andrzej Skiba <jedrek@metaelement.com>
+#name : answer
+# --
+
+$1:
+        letter: $2
+        text: |
+              $3
+        ${4: explanation: |
+            }
+        Question: $0

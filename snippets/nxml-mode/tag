@@ -1,0 +1,5 @@
+# contributor: Andrzej Skiba <jedrek@a-skiba.com>
+# name: <tag>...</tag>   
+# key: tag
+# --
+<$1>$0</$1>

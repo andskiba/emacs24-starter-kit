@@ -1,0 +1,4 @@
+${1:name}:
+  url:   ${2:/}
+  param: { module: ${3:default}, action: ${4:index} }
+$0

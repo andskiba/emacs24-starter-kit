@@ -1,0 +1,7 @@
+#contributor : Andrzej Skiba <jedrek@metaelement.com>
+#name : privfun
+# --
+private function ${1:__construct}($2)
+{
+	$0
+}
