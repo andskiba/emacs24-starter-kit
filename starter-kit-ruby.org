@@ -100,42 +100,6 @@ Clear the compilation buffer between test runs.
 ;; (add-hook 'ruby-mode-hook 'idle-highlight)
 #+end_src emacs-lisp
 
-** Flymake
-   :PROPERTIES:
-   :CUSTOM_ID: flymake
-   :END:
-
-#+begin_src emacs-lisp
-(eval-after-load 'ruby-mode
-  '(progn
-     (require 'flymake)
-
-     ;; Invoke ruby with '-c' to get syntax checking
-     (defun flymake-ruby-init ()
-       (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                          'flymake-create-temp-inplace))
-              (local-file (file-relative-name
-                           temp-file
-                           (file-name-directory buffer-file-name))))
-         (list "ruby" (list "-c" local-file))))
-
-     (push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
-     (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-
-     (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3)
-           flymake-err-line-patterns)
-
-     (add-hook 'ruby-mode-hook
-               (lambda ()
-                 (when (and buffer-file-name
-                            (file-writable-p
-                             (file-name-directory buffer-file-name))
-                            (file-writable-p buffer-file-name))
-                   (local-set-key (kbd "C-c d")
-                                  'flymake-display-err-menu-for-current-line)
-                   (flymake-mode t))))))
-#+end_src
-
 ** Rinari (Minor Mode for Ruby On Rails)
    :PROPERTIES:
    :CUSTOM_ID: rinari
@@ -144,5 +108,5 @@ See [[http://rinari.rubyforge.org/][rinari.rubyforge]] for more information on r
 
 #+begin_src emacs-lisp
   (setq rinari-major-modes
-        '(dired-mode 'ruby-mode  'css-mode 'yaml-mode 'javascript-mode))
+        '(dired-mode 'ruby-mode 'css-mode 'yaml-mode 'javascript-mode))
 #+end_src

@@ -14,10 +14,6 @@ things that are related to Java development, that I don't do elsewhere.
   (custom-set-variables
    '(eclim-eclipse-dirs '("~/software/sts-3.4.0/sts-3.4.0.RELEASE")))
 
-  ;; add the emacs-eclim source
-  (require 'ac-emacs-eclim-source)
-  (ac-emacs-eclim-config)
-
   (require 'company-emacs-eclim)
   (company-emacs-eclim-setup)
 

@@ -363,6 +363,13 @@ block
   (add-to-list 'load-path (concat starter-kit-dir "grammars/"))
 
 #+end_src
+** Flycheck
+#+begin_src emacs-lisp
+  (starter-kit-install-if-needed 'flycheck)
+
+  (global-flycheck-mode t)
+#+end_src
+
 ** Org
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)
@@ -438,13 +445,6 @@ block
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'projectile)
   (projectile-global-mode)
-#+end_src
-
-** Autocomplete
-#+begin_src emacs-lisp
-  (starter-kit-install-if-needed 'auto-complete)
-  (require 'auto-complete-config)
-  (ac-config-default)
 #+end_src
 
 ** Company
@@ -563,6 +563,8 @@ We should use Aspell but only on windows.
 ** Web-mode
 #+begin_src emacs-lisp
   (starter-kit-install-if-needed 'web-mode)
+
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 #+end_src
 * Frame and fonts
 #+begin_src emacs-lisp
@@ -589,8 +591,6 @@ We should use Aspell but only on windows.
   (global-set-key (kbd "C-c s j") 'as/mdn-doc-search)
   (global-set-key (kbd "C-c s g") 'as/prelude-google)
   (global-set-key (kbd "C-c s d") 'as/merriam-webster-search)
-
-  (global-set-key (kbd "C-c s f") 'flymake-mode)
 
   (global-set-key (kbd "C-c s c b") 'as/comment-box)
   (global-set-key (kbd "C-c s c f") 'as/function-comment)
